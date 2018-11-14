@@ -16,31 +16,89 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
-int main(){
+struct block{
+	int row;
+	int col;
+	int width;
+};
+
+void printmatrix(float *matrix, int width);
+
+float *randomatrix(int width);
+
+
+/*
+* int main
+*
+* This function will create a matrix of randomly generated floats, then transpose it
+*/
+int main(int argc, int **argv){
+
+	const char *wm = argv[1];
+	const char *wb = argv[2];
+
+	int wofmat = atoi(wm);
+	int wofbloc = atoi(wb);
+
+	printf("The width is %i\n", wofmat);
+
+	float *ogmat = randomatrix(wofmat);
+	float *tmat = malloc(sizeof(float) * wofmat * wofmat);
+
+	/*FOR TESTING*/
+	printmatrix(ogmat, wofmat);
+//	printmatrix(tmat, wofmat);//I guess this one doesn't really matter, does it?
+
+	free(ogmat);
+	free(tmat);
+
 	return 0;
+}
+
+/*
+* void transposeblock
+*
+* transposes the elements of one block from the original matrix into the new matrix
+*/
+void transposeblock(struct block tb, float **ogmat, float **tmat){
+	
 }
 
 /*
 * void printmatrix
 *
-* This function is only to be used for testing purposes in order to view a matrix in the works
+* This function is only to be used for testing purposes in order to view a matrix in the works. It
+* also assumes that the matrix is square, hence only having one width parameter
 *
 * - change parameters
 */
-void printmatrix(){
-	return 0;
+void printmatrix(float *matrix, int width){
+	printf("The width is %i\n", width);
+	for(int b = 0; b < width * width; b++){
+		printf("%f ", matrix[b]);
+		if(b % width == 0){
+			printf("\n");
+		}
+	}
+	printf("\n");
+	fflush(stdout);
 }
 
 /*
 * float *randomatrix
 *
 * returns a randomly created matrix of floats in the form of a 1-dimensional array with the
-* length being the square of the width inputted
+* length being the square of the width inputted. These floats are between 0 and 100, by the way
 *
 * - make sure to create another input for this for the problem 2 version
 * - are there any limits as to what floats can be created here, or is it just completely random?
 */
 float *randomatrix(int width){
-	
+	float *randoms = malloc(sizeof(float) * width * width);
+	for(int a = 0; a < width * width; a++){
+		randoms[a] = (float)((float)rand() / RAND_MAX * 200 - 100);
+	}
+	return randoms;
 }
