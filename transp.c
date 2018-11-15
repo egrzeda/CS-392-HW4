@@ -36,22 +36,18 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat);
 *
 * This function will create a matrix of randomly generated floats, then transpose it
 */
-int main(int argc, int **argv){
+int main(int argc, char **argv){
 
 	const char *wm = argv[1];
 	const char *wb = argv[2];
-
 	int wofmat = atoi(wm);
-	int wofbloc = atoi(wb);
-
-	printf("The width is %i\n", wofmat);
-
+	int wofbloc =  atoi(wb);
 	float *ogmat = randomatrix(wofmat);
 	float *tmat = malloc(sizeof(float) * wofmat * wofmat);
 
 	/*FOR TESTING*/
 	printmatrix(ogmat, wofmat);
-//	printmatrix(tmat, wofmat);//I guess this one doesn't really matter, does it?
+	printmatrix(tmat, wofmat);//I guess this one doesn't really matter, does it?
 
 	free(ogmat);
 	free(tmat);
@@ -63,12 +59,27 @@ int main(int argc, int **argv){
 * void transposeblock
 *
 * transposes the elements of one block from the original matrix into the new matrix
+*
 */
 void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
 	/* finding out where to start with the block to be transposed */
 	int startpoint = (tb.width * tb.col) + (tb.width * tb.col * wofmat);
-	int colinblock = 0;
-	int rowinblock = 0;
+	int coltorow = tb.width * tb.col;
+	int rowtocol = tb.width * tb.row;
+	int elementstocopy = tb.width * tb.width;
+	int c = 0;
+	while(1){
+		/* The following loop is the core of the transposition. Add the actual
+		   transposition in now. */
+		if(c % wofmat == 0){
+			rowtocol++;
+			coltorow = tb.width * tb.col;
+			if(rowtocol == tb.width){
+				break;
+			}
+		}
+		c++;
+	}
 }
 
 /*
@@ -82,10 +93,10 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
 void printmatrix(float *matrix, int width){
 	printf("The width is %i\n", width);
 	for(int b = 0; b < width * width; b++){
-		printf("%f ", matrix[b]);
-		if(b % width == 0){
+		if(b % width == 0 && b != 0){
 			printf("\n");
 		}
+		printf("%f ", matrix[b]);
 	}
 	printf("\n");
 	fflush(stdout);
