@@ -19,14 +19,16 @@
 #include <sys/stat.h>
 
 struct block{
-	int row;
 	int col;
+	int row;
 	int width;
 };
 
 void printmatrix(float *matrix, int width);
 
 float *randomatrix(int width);
+
+void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat);
 
 
 /*
@@ -62,8 +64,11 @@ int main(int argc, int **argv){
 *
 * transposes the elements of one block from the original matrix into the new matrix
 */
-void transposeblock(struct block tb, float **ogmat, float **tmat){
-	
+void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
+	/* finding out where to start with the block to be transposed */
+	int startpoint = (tb.width * tb.col) + (tb.width * tb.col * wofmat);
+	int colinblock = 0;
+	int rowinblock = 0;
 }
 
 /*
