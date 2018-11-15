@@ -18,6 +18,10 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+
+/*
+* This is the structure for the outlines of the block to be transposed
+*/
 struct block{
 	int col;
 	int row;
@@ -69,8 +73,10 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
 	int elementstocopy = tb.width * tb.width;
 	int c = 0;
 	while(1){
-		/* The following loop is the core of the transposition. Add the actual
-		   transposition in now. */
+
+		*tmat[coltorow * tb.width + rowtocol] = *ogmat[rowtocol * tb.width + coltorow];
+
+		c++;
 		if(c % wofmat == 0){
 			rowtocol++;
 			coltorow = tb.width * tb.col;
@@ -78,7 +84,6 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
 				break;
 			}
 		}
-		c++;
 	}
 }
 
