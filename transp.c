@@ -52,6 +52,33 @@ int main(int argc, char **argv){
 	/*FOR TESTING*/
 	printmatrix(ogmat, wofmat);
 	printmatrix(tmat, wofmat);//I guess this one doesn't really matter, does it?
+	printf("\n\n");
+	fflush(stdout);
+
+	struct block tb;
+	tb.width = wofbloc;
+	tb.row = 0;
+	tb.col = 0;
+
+	float **om = &ogmat;
+	float **tm = &tmat;
+
+	int blocksperrow = wofmat / wofbloc;
+
+	for(int f = 0; f < blocksperrow; f++){
+		tb.row = f;
+		for(int g = 0; g < blocksperrow; g++){
+			tb.col = g;
+			transposeblock(tb, om, tm, wofmat);
+		}
+	}
+
+	transposeblock(tb, om, tm, wofmat);
+
+	/*FOR TESTING*/
+	printf("\n\n");
+	printmatrix(ogmat, wofmat);
+	printmatrix(tmat, wofmat);
 
 	free(ogmat);
 	free(tmat);
@@ -66,23 +93,23 @@ int main(int argc, char **argv){
 *
 */
 void transposeblock(struct block tb, float **ogmat, float **tmat, int wofmat){
-	/* finding out where to start with the block to be transposed */
-	int startpoint = (tb.width * tb.col) + (tb.width * tb.col * wofmat);
-	int coltorow = tb.width * tb.col;
-	int rowtocol = tb.width * tb.row;
-	int elementstocopy = tb.width * tb.width;
-	int c = 0;
-	while(1){
 
-		*tmat[coltorow * tb.width + rowtocol] = *ogmat[rowtocol * tb.width + coltorow];
+	int wofbloc = tb.width;
+	int startctr = wofbloc * tb.col;
+	int startrtc = wofbloc * tb.row;
+	int coltorow;
+	int rowtocol;
 
-		c++;
-		if(c % wofmat == 0){
-			rowtocol++;
-			coltorow = tb.width * tb.col;
-			if(rowtocol == tb.width){
-				break;
-			}
+	*(*tmat+10) = *(*ogmat+10);//THIS LINE SEG FAULTS FOR SOME REASON
+
+
+	for(int d = 0; d < wofbloc; d++){
+		for(int e = 0; e < wofbloc; e++){
+			coltorow = startctr + d;
+			rowtocol = startrtc + e;
+			int tmposition = coltorow*wofmat+rowtocol;
+			int omposition = rowtocol*wofmat+coltorow;
+			*(*tmat + tmposition) = *(*ogmat+omposition);
 		}
 	}
 }
