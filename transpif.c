@@ -58,7 +58,13 @@ int main(int argc, char **argv){
 
 	/* Getting the numbers of blocks per row and column */
 	int horiblocks = wofmat / wofbloc;
+	if(wofmat % wofbloc != 0){
+		horiblocks++;
+	}
 	int vertblocks = hofmat / wofbloc;
+	if(hofmat % wofbloc != 0){
+		vertblocks++;
+	}
 
 	for(int f = 0; f < vertblocks; f++){
 		tb.row = f;
@@ -104,17 +110,20 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int hofmat, in
 			int tmposition = coltorow * wofmat + rowtocol;
 			int omposition = rowtocol * wofmat + coltorow;
 
-			printf("coltorow = %i and rowtocol = %i\n", coltorow, rowtocol);
-			fflush(stdout);
+//			printf("coltorow = %i and rowtocol = %i\n", coltorow, rowtocol);
+//			fflush(stdout);
 
 			/* basic boundary check for if the operation would happen in bounds */
-			if(!(coltorow > wofmat || rowtocol > hofmat)){
-//				*(*tmat + tmposition) = *(*ogmat + omposition);
+			if(!(coltorow >= wofmat || rowtocol >= hofmat)){
+				*(*tmat + tmposition) = *(*ogmat + omposition);
+//				printf("column = %i and row = %i", coltorow, rowtocol);
+//				printf(" while wofmat = %i and hofmat = %i\n", wofmat, hofmat);
+//				fflush(stdout);
 			}
 			else{
-				printf("column = %i and row = %i", coltorow, rowtocol);
-				printf(" while wofmat = %i and hofmat = %i\n", wofmat, hofmat);
-				fflush(stdout);
+//				printf("column = %i and row = %i", coltorow, rowtocol);
+//				printf(" while wofmat = %i and hofmat = %i\n", wofmat, hofmat);
+//				fflush(stdout);
 			}
 		}
 	}
