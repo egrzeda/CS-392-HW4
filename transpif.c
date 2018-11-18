@@ -58,7 +58,13 @@ int main(int argc, char **argv){
 
 	/* Getting the numbers of blocks per row and column */
 	int horiblocks = wofmat / wofbloc;
+	if(wofmat % wofbloc != 0){
+		horiblocks++;
+	}
 	int vertblocks = hofmat / wofbloc;
+	if(hofmat % wofbloc != 0){
+		vertblocks++;
+	}
 
 	for(int f = 0; f < vertblocks; f++){
 		tb.row = f;
