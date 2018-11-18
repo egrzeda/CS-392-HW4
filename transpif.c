@@ -77,7 +77,7 @@ int main(int argc, char **argv){
 	/*FOR TESTING*/
 	printf("\n\n");
 	printmatrix(ogmat, hofmat, wofmat);
-	printmatrix(tmat, hofmat, wofmat);
+	printmatrix(tmat, wofmat, hofmat);
 
 	free(ogmat);
 	free(tmat);
@@ -105,12 +105,23 @@ void transposeblock(struct block tb, float **ogmat, float **tmat, int hofmat, in
 	/* besides the boundary check, I think this should be the same as in transp.c */
 	for(int d = 0; d < wofbloc; d++){
 		for(int e = 0; e < wofbloc; e++){
-			/* INSERT BOUNDARY CHECK IN HERE; PROBABLY IN AN IF STATEMENT */
 			coltorow = startctr + d;
 			rowtocol = startrtc + e;
 			int tmposition = coltorow * wofmat + rowtocol;
 			int omposition = rowtocol * wofmat + coltorow;
-			*(*tmat + tmposition) = *(*ogmat + omposition);
+
+			printf("coltorow = %i and rowtocol = %i\n", coltorow, rowtocol);
+			fflush(stdout);
+
+			/* basic boundary check for if the operation would happen in bounds */
+			if(!(coltorow > wofmat || rowtocol > hofmat)){
+//				*(*tmat + tmposition) = *(*ogmat + omposition);
+			}
+			else{
+				printf("column = %i and row = %i", coltorow, rowtocol);
+				printf(" while wofmat = %i and hofmat = %i\n", wofmat, hofmat);
+				fflush(stdout);
+			}
 		}
 	}
 }
@@ -144,8 +155,15 @@ void printmatrix(float *matrix, int height, int width){
 *
 */
 float *randomatrix(int height, int width){
-	float *randoms = malloc(sizeof(float) * height * width);
-	for(int a = 0; a < height * width; a++){
+	int larger;
+	if(height > width){
+		larger = height;
+	}
+	else{
+		larger = width;
+	}
+	float *randoms = malloc(sizeof(float) * width * height);
+	for(int a = 0; a < width * height; a++){
 		randoms[a] = (float)((float)rand() / RAND_MAX * 200-100);
 	}
 	return randoms;
